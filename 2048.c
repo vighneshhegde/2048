@@ -1,6 +1,8 @@
 #include"2048.h"
 
 int main(){
+
+    srand(time(NULL));
     
     Grid* g = initgrid();
     printgrid(g);

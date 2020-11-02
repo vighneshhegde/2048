@@ -68,7 +68,7 @@ void printgrid(Grid* g){
     setlocale(LC_CTYPE, "");
     wchar_t star = 0x2605;
     g->i=0;
-    wprintf(L"\e[1;1H\e[2J");
+    //wprintf(L"\e[1;1H\e[2J");
     //wprintf()
     //wprintf(L"%lc%.*lc%lc\n", 0x250c,5,0x2500,0x252c);
     printN(0x250c,1); 
@@ -238,12 +238,15 @@ void setgrid(Grid* g, char com){
                     if(g->v[i-4]==0&&g->v[i]!=0){//shift
                         g->v[i-4]=g->v[i];
                         g->v[i]=0;
-                        change=1;
+                        if(i-4>=4)i-=5; //5 to correct for the ++, I should ideally use continue;
                     }
-                    else if(g->v[i-4]==g->v[i]&&g->v[i]!=0){//merge
+                    else if(g->v[i-4]==g->v[i]&&g->v[i]!=0){//merge & shift
                         g->v[i-4]+=g->v[i];
                         g->v[i]=0;
-                        //change=1;
+                        for(int j=i;j+4<16;j+=4){
+                            g->v[j]=g->v[j+4];
+                            g->v[j+4]=0;
+                        }
                     }
                 }
             }
@@ -255,12 +258,15 @@ void setgrid(Grid* g, char com){
                     if(g->v[i+4]==0&&g->v[i]!=0){//shift
                         g->v[i+4]=g->v[i];
                         g->v[i]=0;
-                        change=1;
+                        if(i+4<=11)i+=5;
                     }
-                    else if(g->v[i+4]==g->v[i]&&g->v[i]!=0){//merge
+                    else if(g->v[i+4]==g->v[i]&&g->v[i]!=0){//merge & shift
                         g->v[i+4]+=g->v[i];
                         g->v[i]=0;
-                        //change=1;
+                        for(int j=i;j-4>=0;j-=4){
+                            g->v[j]=g->v[j-4];
+                            g->v[j-4]=0;
+                        }
                     }
                 }
             }
@@ -271,14 +277,18 @@ void setgrid(Grid* g, char com){
                 int ind[12] = {1,2,3,5,6,7,9,10,11,13,14,15};
                 for(int i=0;i<12;i++){
                     if(g->v[ind[i]-1]==0&&g->v[ind[i]]!=0){//shift
-                        g->v[ind[i]-1]=g->v[ind[i]];
-                        g->v[ind[i]]=0;
-                        change=1;
+                        g->v[ind[i]-1] = g->v[ind[i]];
+                        g->v[ind[i]] = 0;
+                        if(i-1>=0&&ind[i]%4!=1)i-=2; //-2 to compensate for ++
                     }
                     else if(g->v[ind[i]-1]==g->v[ind[i]]&&g->v[ind[i]]!=0){//merge
                         g->v[ind[i]-1]+=g->v[ind[i]];
                         g->v[ind[i]]=0;
                         //change=1;
+                        for(int j=ind[i];(j+1)%4!=0;j++){
+                            g->v[j] = g->v[j+1];
+                            g->v[j+1] = 0;
+                        }
                     }
                 }
             }
@@ -290,14 +300,18 @@ void setgrid(Grid* g, char com){
                 int ind[12] = {0,1,2,4,5,6,8,9,10,12,13,14};
                 for(int i=11;i>=0;i--){
                     if(g->v[ind[i]+1]==0&&g->v[ind[i]]!=0){//shift
-                        g->v[ind[i]+1]=g->v[ind[i]];
-                        g->v[ind[i]]=0;
-                        change=1;
+                        g->v[ind[i]+1] = g->v[ind[i]];
+                        g->v[ind[i]] = 0;
+                        if(i+1<=11 && ind[i]%4!=2)i+=2;
                     }
                     else if(g->v[ind[i]+1]==g->v[ind[i]]&&g->v[ind[i]]!=0){//merge
                         g->v[ind[i]+1]+=g->v[ind[i]];
                         g->v[ind[i]]=0;
                         //change=1;
+                        for(int j=ind[i];j%4!=0;j--){
+                            g->v[j] = g->v[j-1];
+                            g->v[j-1] = 0;
+                        }
                     }
                 }
             }
@@ -307,9 +321,9 @@ void setgrid(Grid* g, char com){
 
     }
     //randomly add a new 2 or a 4
-    int randn = 0;
-    if(rand()%10==0) randn=4; //10% chance of 4 
-    else if(rand()%10<5) randn=2;  //45% chance of 2
+    int randn = 2;
+    if(rand()%10==0) randn=4; //10% chance of 4, 90% chance of 2, no chance of 0
+    wprintf(L"%d\n",randn);
 
     int nz = 0;
     for(int i=0;i<16;i++){
