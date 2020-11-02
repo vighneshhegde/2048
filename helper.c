@@ -68,7 +68,7 @@ void printgrid(Grid* g){
     setlocale(LC_CTYPE, "");
     wchar_t star = 0x2605;
     g->i=0;
-    //wprintf(L"\e[1;1H\e[2J");
+    wprintf(L"\e[1;1H\e[2J");
     //wprintf()
     //wprintf(L"%lc%.*lc%lc\n", 0x250c,5,0x2500,0x252c);
     printN(0x250c,1); 
