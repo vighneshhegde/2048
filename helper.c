@@ -58,17 +58,16 @@ void print_int(int x, int w){
 }
 
 void exit_game(){
-    wprintf(L"Game over!\n");
-    ungetc('q',stdin); //write something better
+    ungetc('q',stdin); //to force quit the game. exit() leaves terminal in 'raw' state. TO DO: write something better
     return;
 }
+
 
 
 void printgrid(Grid* g){
     setlocale(LC_CTYPE, "");
     wchar_t star = 0x2605;
     g->i=0;
-    wprintf(L"\e[1;1H\e[2J");
     //wprintf()
     //wprintf(L"%lc%.*lc%lc\n", 0x250c,5,0x2500,0x252c);
     printN(0x250c,1); 
@@ -219,6 +218,7 @@ Grid* initgrid(){
     g->v = malloc(sizeof(int)*16);
     g->z = malloc(sizeof(int)*16);
     g->i = 0;
+    g->max = 0;
     g->v[0]=2;
     for(int i=1;i<16;i++){
         g->v[i]=0;
@@ -247,6 +247,7 @@ void setgrid(Grid* g, char com){
                             g->v[j]=g->v[j+4];
                             g->v[j+4]=0;
                         }
+                        if(g->v[i-4] > g->max) g->max=g->v[i-4];
                     }
                 }
             }
@@ -267,6 +268,7 @@ void setgrid(Grid* g, char com){
                             g->v[j]=g->v[j-4];
                             g->v[j-4]=0;
                         }
+                        if(g->v[i+4] > g->max) g->max=g->v[i+4];
                     }
                 }
             }
@@ -289,6 +291,7 @@ void setgrid(Grid* g, char com){
                             g->v[j] = g->v[j+1];
                             g->v[j+1] = 0;
                         }
+                        if(g->v[ind[i]-1] > g->max) g->max=g->v[ind[i]-1];
                     }
                 }
             }
@@ -312,6 +315,7 @@ void setgrid(Grid* g, char com){
                             g->v[j] = g->v[j-1];
                             g->v[j-1] = 0;
                         }
+                        if(g->v[ind[i]+1] > g->max) g->max=g->v[ind[i]+1];
                     }
                 }
             }
@@ -323,7 +327,7 @@ void setgrid(Grid* g, char com){
     //randomly add a new 2 or a 4
     int randn = 2;
     if(rand()%10==0) randn=4; //10% chance of 4, 90% chance of 2, no chance of 0
-    wprintf(L"%d\n",randn);
+    //wprintf(L"%d\n",randn);
 
     int nz = 0;
     for(int i=0;i<16;i++){
@@ -334,6 +338,7 @@ void setgrid(Grid* g, char com){
     if(nz==0){
         char chk = check_for_moves(g);
         if(chk =='x'){
+            wprintf(L"Game over! You reached %d\n", g->max);
             exit_game();
         }
         else{

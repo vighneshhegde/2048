@@ -24,6 +24,7 @@ typedef struct grid{
     int* v; //value
     int* z; //zero indices
     int i;
+    int max; //max value at any given state
 } Grid;
 
 void centerText(char *text, char* colour, int fieldWidth);

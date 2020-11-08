@@ -26,6 +26,7 @@ int main(){
 
     while (getchar() == '\033') { // if the first value is esc
         getchar(); // skip the [
+        wprintf(L"\e[1;1H\e[2J");
         switch(getchar()) { // the real value
             case 'A':
                 // code for arrow up
