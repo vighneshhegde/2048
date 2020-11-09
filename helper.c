@@ -57,12 +57,6 @@ void print_int(int x, int w){
     }
 }
 
-void exit_game(){
-    ungetc('q',stdin); //to force quit the game. exit() leaves terminal in 'raw' state. TO DO: write something better
-    return;
-}
-
-
 
 void printgrid(Grid* g){
     setlocale(LC_CTYPE, "");
@@ -232,7 +226,7 @@ void setgrid(Grid* g, char com){
     int change=1;
     switch(com){
         case 'u':
-            while(change){
+            {
                 change = 0;
                 for(int i=4;i<16;i++){
                     if(g->v[i-4]==0&&g->v[i]!=0){//shift
@@ -253,7 +247,7 @@ void setgrid(Grid* g, char com){
             }
             break;
         case 'd':
-            while(change){
+            {
                 change = 0;
                 for(int i=11;i>=0;i--){
                     if(g->v[i+4]==0&&g->v[i]!=0){//shift
@@ -274,7 +268,7 @@ void setgrid(Grid* g, char com){
             }
             break;
         case 'l':
-            while(change){
+            {
                 change = 0;
                 int ind[12] = {1,2,3,5,6,7,9,10,11,13,14,15};
                 for(int i=0;i<12;i++){
@@ -297,7 +291,7 @@ void setgrid(Grid* g, char com){
             }
             break;
         case 'r':
-            while(change){
+            {
                 change = 0;
                 //wprintf(L"1");
                 int ind[12] = {0,1,2,4,5,6,8,9,10,12,13,14};
@@ -338,8 +332,7 @@ void setgrid(Grid* g, char com){
     if(nz==0){
         char chk = check_for_moves(g);
         if(chk =='x'){
-            wprintf(L"Game over! You reached %d\n", g->max);
-            exit_game();
+           g->gameover = 1;
         }
         else{
            print_hint(chk); 

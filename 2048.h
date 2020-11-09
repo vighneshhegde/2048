@@ -23,17 +23,22 @@
 typedef struct grid{
     int* v; //value
     int* z; //zero indices
-    int i;
+    int i; //just a bookkeeping variable
+    int size; //dimensions, size x size
     int max; //max value at any given state
+    int gameover; //is 0 while the game is running
 } Grid;
 
+Grid* initgrid();
+
+//print helpers
 void centerText(char *text, char* colour, int fieldWidth);
 void printN(wchar_t ch, int n);
 void print_int(int x, int w);
-void exit_game();
 void printgrid(Grid* g);
 void print_hint(char c);
+
 char check_for_moves(Grid* g);
-Grid* initgrid();
 void setgrid(Grid* g, char com);
 
+void exit_game();
