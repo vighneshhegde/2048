@@ -15,21 +15,27 @@
 #define CYN   "\x1B[36m"
 #define WHT   "\x1B[37m"
 #define RESET "\x1B[0m"
+#define BOLD  "\x1B[1m"
 //90 to 97 is also fair game, brighter version of these colours.
 
 #define LOOP(n) for(int ii = 0; ii < n; ++ ii)
+#define clrscr() wprintf(L"\e[1;1H\e[2J") // clear screen
 
 
 typedef struct grid{
     int* v; //value
+    int* ov; //old value
     int* z; //zero indices
     int i; //just a bookkeeping variable
     int size; //dimensions, size x size
     int max; //max value at any given state
+    int score; //merge + change additions
     int gameover; //is 0 while the game is running
+    int isundone; //is 1 if undo already granted
 } Grid;
 
 Grid* initgrid();
+void initscreen();
 
 //print helpers
 void centerText(char *text, char* colour, int fieldWidth);
@@ -40,5 +46,4 @@ void print_hint(char c);
 
 char check_for_moves(Grid* g);
 void setgrid(Grid* g, char com);
-
-void exit_game();
+void undogrid(Grid* g);

@@ -5,7 +5,6 @@ int main(){
     srand(time(NULL));
     
     Grid* g = initgrid();
-    printgrid(g);
 
     static struct termios oldt, newt;
 
@@ -24,10 +23,14 @@ int main(){
     TCSANOW tells tcsetattr to change attributes immediately. */
     tcsetattr( STDIN_FILENO, TCSANOW, &newt);
 
+    //initscreen();
+    printgrid(g);
+
     while (!g->gameover){
-        if(getchar() == '\033') { // if the first value is esc
+        char t = getchar();
+        if(t== '\033') { // if the first value is esc
             getchar(); // skip the [
-            wprintf(L"\e[1;1H\e[2J"); // clear screen
+            clrscr();
             switch(getchar()) { // the real value
                 case 'A':
                     // code for arrow up
@@ -51,16 +54,27 @@ int main(){
                     continue;
             }
         }
+        else if (t == 'u'){
+            if(g->isundone == 0){
+                g->isundone = 1;
+                undogrid(g);
+                wprintf(L"Move undone.\n");
+            }
+            else{
+                wprintf(L"Sorry, can't undo more than once.\n");
+            }
+        }
+
         else{
             wprintf(L"Do you really want to quit? (y/n)\n");
             if(getchar() == 'y') break;
             else {
-                wprintf(L"\e[1;1H\e[2J"); // clear screen
+                clrscr();
                 printgrid(g);                
             }
         }
     }
-    wprintf(L"Game over! You reached %d\n", g->max);
+    wprintf(L""BOLD RED"Game over!"RESET" You reached "YEL"%d\n", g->max);
 
     /*restore the old settings*/
     tcsetattr( STDIN_FILENO, TCSANOW, &oldt);
