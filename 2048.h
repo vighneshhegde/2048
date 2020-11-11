@@ -32,6 +32,7 @@ typedef struct grid{
     int score; //merge + change additions
     int gameover; //is 0 while the game is running
     int isundone; //is 1 if undo already granted
+    wchar_t hint; //char to store hint
 } Grid;
 
 Grid* initgrid();
@@ -42,7 +43,7 @@ void centerText(char *text, char* colour, int fieldWidth);
 void printN(wchar_t ch, int n);
 void print_int(int x, int w);
 void printgrid(Grid* g);
-void print_hint(char c);
+void set_hint(Grid*g, char c);
 
 char check_for_moves(Grid* g);
 void setgrid(Grid* g, char com);

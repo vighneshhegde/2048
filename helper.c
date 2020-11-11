@@ -156,32 +156,33 @@ void printgrid(Grid* g){
     printN(0x2518,1); 
     wprintf(L"\n");
     
-    for(int i=0;i<3;i++){
-        for(int j=0;j<3;j++){
-           ; 
-        }
+    if(g->hint!=0){
+        wprintf(L"Hint: Try %lc\n",g->hint);
+        g->hint = 0;
     }
 }
 
-void print_hint(char c){
+void set_hint(Grid* g, char c){
     wchar_t ch;
     switch(c){
         case 'u':
-            ch = 0x2190;
-            break;
-        case 'd':
             ch = 0x2191;
             break;
-        case 'r':
+        case 'd':
             ch = 0x2192;
             break;
-        case 'l':
+        case 'r':
             ch = 0x2193;
+            break;
+        case 'l':
+            ch = 0x2190;
             break;
         default:
             break;
     }
-    wprintf(L"Hint: Try %lc\n",ch); 
+    g->hint = ch;
+    //g->hint = malloc(12*sizeof(wchar_t));
+    //swprintf(g->hint, 12*sizeof(wchar_t), L"Hint: Try %lc\n",ch); 
 }
 
 char check_for_moves(Grid* g){
@@ -224,6 +225,7 @@ Grid* initgrid(){
     g->score = 2;
     g->gameover = 0;
     g->isundone = 1;
+    g->hint = 0;
     for(int i=0;i<size;i++){
         g->v[i]=0;
     }
@@ -365,7 +367,7 @@ void setgrid(Grid* g, char com){
            g->gameover = 1;
         }
         else if(change==0){
-           print_hint(chk); 
+           set_hint(g, chk); 
         }
     }
     else if(change==1){
