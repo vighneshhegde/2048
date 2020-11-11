@@ -23,7 +23,7 @@ int main(){
     TCSANOW tells tcsetattr to change attributes immediately. */
     tcsetattr( STDIN_FILENO, TCSANOW, &newt);
 
-    //initscreen();
+    initscreen();
     printgrid(g);
 
     while (!g->gameover){

@@ -164,22 +164,24 @@ void printgrid(Grid* g){
 }
 
 void print_hint(char c){
+    wchar_t ch;
     switch(c){
         case 'u':
-           wprintf(L"Hint: Try up\n"); 
-           break;
+            ch = 0x2190;
+            break;
         case 'd':
-           wprintf(L"Hint: Try down\n"); 
-           break;
+            ch = 0x2191;
+            break;
         case 'r':
-           wprintf(L"Hint: Try right\n"); 
-           break;
+            ch = 0x2192;
+            break;
         case 'l':
-           wprintf(L"Hint: Try left\n"); 
-           break;
+            ch = 0x2193;
+            break;
         default:
-           break;
+            break;
     }
+    wprintf(L"Hint: Try %lc\n",ch); 
 }
 
 char check_for_moves(Grid* g){
@@ -231,13 +233,14 @@ Grid* initgrid(){
 
 void initscreen(){
     setlocale(LC_CTYPE, "");
-    //wprintf(L"\e[1;1H\e[2J"); // clear screen
-    wprintf(L""BOLD RED"2048"RESET); 
+    wprintf(L"\e[1;1H\e[2J"); // clear screen
+    wprintf(L""BOLD RED"\t\t  2048\n"RESET); 
 
-
-    wprintf(L"\t\t\tPress any key to continue...\n");
+    wprintf(L"Use arrow keys (%lc %lc %lc %lc ) for controlling the grid",
+            0x2190,0x2191,0x2192,0x2193);
+    wprintf(L"\n\n\n\t\t\tPress any key to begin...\n");
     getchar();
-    //wprintf(L"\e[1;1H\e[2J"); // clear screen
+    wprintf(L"\e[1;1H\e[2J"); // clear screen
 
 }
 
