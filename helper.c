@@ -63,7 +63,8 @@ void printgrid(Grid* g){
     g->i=0;
     //wprintf(L"%lc%.*lc%lc\n", 0x250c,5,0x2500,0x252c);
     //TODO: print title and score here. Score is sum of all merges so far
-    //wprintf(L"");
+    wprintf(L"\t\t  "RED BOLD"2048\n");
+    wprintf(L""CYN BOLD"Score:"RESET"\t%d\n",g->score);
     printN(0x250c,1); 
     printN(0x2500,9); 
     LOOP(3){
@@ -218,6 +219,7 @@ Grid* initgrid(){
     g->size = size;
     g->i = 0;
     g->max = 2;
+    g->score = 2;
     g->gameover = 0;
     g->isundone = 1;
     for(int i=0;i<size;i++){
@@ -259,6 +261,7 @@ void setgrid(Grid* g, char com){
                         change = 1;
                         g->v[i-4]+=g->v[i];
                         g->v[i]=0;
+                        g->score += g->v[i-4];
                         for(int j=i;j+4<16;j+=4){
                             g->v[j]=g->v[j+4];
                             g->v[j+4]=0;
@@ -281,6 +284,7 @@ void setgrid(Grid* g, char com){
                         change = 1;
                         g->v[i+4]+=g->v[i];
                         g->v[i]=0;
+                        g->score += g->v[i+4];
                         for(int j=i;j-4>=0;j-=4){
                             g->v[j]=g->v[j-4];
                             g->v[j-4]=0;
@@ -304,6 +308,7 @@ void setgrid(Grid* g, char com){
                         change = 1;
                         g->v[ind[i]-1]+=g->v[ind[i]];
                         g->v[ind[i]]=0;
+                        g->score += g->v[ind[i]-1];
                         for(int j=ind[i];(j+1)%4!=0;j++){
                             g->v[j] = g->v[j+1];
                             g->v[j+1] = 0;
@@ -329,6 +334,7 @@ void setgrid(Grid* g, char com){
                         change = 1;
                         g->v[ind[i]+1]+=g->v[ind[i]];
                         g->v[ind[i]]=0;
+                        g->score += g->v[ind[i]+1];
                         for(int j=ind[i];j%4!=0;j--){
                             g->v[j] = g->v[j-1];
                             g->v[j-1] = 0;
@@ -364,6 +370,7 @@ void setgrid(Grid* g, char com){
         int randn = 2;
         if(rand()%10==0) randn=4; //10% chance of 4, 90% chance of 2, no chance of 0
         g->v[g->z[rand()%nz]] = randn;
+        g->score += randn;
     }
 
     if(change==1){

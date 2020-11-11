@@ -74,7 +74,8 @@ int main(){
             }
         }
     }
-    wprintf(L""BOLD RED"Game over!"RESET" You reached "YEL"%d\n", g->max);
+    wprintf(L""BOLD RED"Game over!\n"RESET"You reached "YEL"%d "RESET"with a score of "CYN"%d\n",
+            g->max, g->score);
 
     /*restore the old settings*/
     tcsetattr( STDIN_FILENO, TCSANOW, &oldt);
