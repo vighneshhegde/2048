@@ -70,8 +70,8 @@ void printgrid(Grid *g)
     g->i = 0;
     //wprintf(L"%lc%.*lc%lc\n", 0x250c,5,0x2500,0x252c);
     //TODO: print title and score here. Score is sum of all merges so far
-    wprintf(L"\t\t  " RED BOLD "2048\n");
-    wprintf(L"" CYN BOLD "Score:" RESET "\t%d\n", g->score);
+    wprintf(L"\t\t\t\t  " RED BOLD "2048\n\t\t");
+    wprintf(L"" CYN BOLD "Score:" RESET "\t%d\n\t\t", g->score);
     printN(0x250c, 1);
     printN(0x2500, 9);
     LOOP(3)
@@ -80,7 +80,7 @@ void printgrid(Grid *g)
         printN(0x2500, 9);
     }
     printN(0x2510, 1);
-    wprintf(L"\n");
+    wprintf(L"\n\t\t");
 
     LOOP(3)
     {
@@ -92,7 +92,7 @@ void printgrid(Grid *g)
             printN(0x0020, 9);
         }
         printN(0x2502, 1);
-        wprintf(L"\n");
+        wprintf(L"\n\t\t");
 
         printN(0x2502, 1);
         printN(0x0020, 2);
@@ -106,7 +106,7 @@ void printgrid(Grid *g)
             printN(0x0020, 2);
         }
         printN(0x2502, 1);
-        wprintf(L"\n");
+        wprintf(L"\n\t\t");
 
         printN(0x2502, 1);
         printN(0x0020, 9);
@@ -116,7 +116,7 @@ void printgrid(Grid *g)
             printN(0x0020, 9);
         }
         printN(0x2502, 1);
-        wprintf(L"\n");
+        wprintf(L"\n\t\t");
 
         printN(0x251c, 1);
         printN(0x2500, 9);
@@ -126,7 +126,7 @@ void printgrid(Grid *g)
             printN(0x2500, 9);
         }
         printN(0x2524, 1);
-        wprintf(L"\n");
+        wprintf(L"\n\t\t");
     }
     printN(0x2502, 1);
     printN(0x0020, 9);
@@ -136,7 +136,7 @@ void printgrid(Grid *g)
         printN(0x0020, 9);
     }
     printN(0x2502, 1);
-    wprintf(L"\n");
+    wprintf(L"\n\t\t");
 
     printN(0x2502, 1);
     printN(0x0020, 2);
@@ -150,7 +150,7 @@ void printgrid(Grid *g)
         printN(0x0020, 2);
     }
     printN(0x2502, 1);
-    wprintf(L"\n");
+    wprintf(L"\n\t\t");
 
     printN(0x2502, 1);
     printN(0x0020, 9);
@@ -160,7 +160,7 @@ void printgrid(Grid *g)
         printN(0x0020, 9);
     }
     printN(0x2502, 1);
-    wprintf(L"\n");
+    wprintf(L"\n\t\t");
 
     printN(0x2514, 1);
     printN(0x2500, 9);
@@ -170,11 +170,11 @@ void printgrid(Grid *g)
         printN(0x2500, 9);
     }
     printN(0x2518, 1);
-    wprintf(L"\n");
+    wprintf(L"\n\t\t");
 
     if (g->hint != 0)
     {
-        wprintf(L"Hint: Try %lc\n", g->hint);
+        wprintf(L"Hint: Try %lc\n\t\t", g->hint);
         g->hint = 0;
     }
 }
@@ -201,7 +201,7 @@ void set_hint(Grid *g, char c)
     }
     g->hint = ch;
     //g->hint = malloc(12*sizeof(wchar_t));
-    //swprintf(g->hint, 12*sizeof(wchar_t), L"Hint: Try %lc\n",ch);
+    //swprintf(g->hint, 12*sizeof(wchar_t), L"Hint: Try %lc\n\t\t",ch);
 }
 
 char check_for_moves(Grid *g)
@@ -263,7 +263,7 @@ Grid *initgrid()
     return g;
 }
 
-void initscreen()
+int initscreen()
 {
     setlocale(LC_CTYPE, "");
     wprintf(L"\e[1;1H\e[2J"); // clear screen
@@ -277,20 +277,25 @@ void initscreen()
     // wprintf(L"\t%lc       %lc   %lc %lc      %lc  %lc     %lc\n", c, c, c, c, c, c, c);
     // wprintf(L"\t%lc        %lc   %lc       %lc  %lc     %lc\n", c, c, c, c, c, c);
     // wprintf(L"\t%lc%lc%lc%lc%lc%lc%lc   %lc%lc%lc        %lc   %lc%lc%lc%lc%lc\n", c, c, c, c, c, c, c, c, c, c, c, c, c, c, c, c);
-    wprintf(L"\t ___   ___  _  _   ___  \n");
-    wprintf(L"\t|__ \\ / _ \\| || | / _ \\ \n");
-    wprintf(L"\t   ) | | | | || || (_) |\n");
-    wprintf(L"\t  / /| | | |__   _> _ < \n");
-    wprintf(L"\t / /_| |_| |  | || (_) |\n");
-    wprintf(L"\t|____|\\___/   |_| \\___/ \n");
+    wprintf(L"\t\t\t ___   ___  _  _   ___  \n");
+    wprintf(L"\t\t\t|__ \\ / _ \\| || | / _ \\ \n");
+    wprintf(L"\t\t\t   ) | | | | || || (_) |\n");
+    wprintf(L"\t\t\t  / /| | | |__   _> _ < \n");
+    wprintf(L"\t\t\t / /_| |_| |  | || (_) |\n");
+    wprintf(L"\t\t\t|____|\\___/   |_| \\___/ \n");
 
     wprintf(L"\n\n\n" RESET);
 
-    wprintf(L"Use arrow keys (%lc %lc %lc %lc ) for controlling the grid\n",
+    wprintf(L"\t\tUse arrow keys (%lc %lc %lc %lc) for controlling the grid.\n"
+            "\t\tPress 'u' for undoing the previous move.\n",
             0x2190, 0x2191, 0x2192, 0x2193);
-    wprintf(L"\n\t\t\tPress any key to begin...\n");
-    getchar();
+    wprintf(L"\n\t\tPress 'q' to exit. Press any other key to begin...\n");
+    if (getchar() == 'q')
+    {
+        return -1;
+    };
     wprintf(L"\e[1;1H\e[2J"); // clear screen
+    return 0;
 }
 
 void setgrid(Grid *g, char com)

@@ -36,7 +36,7 @@ typedef struct grid{
 } Grid;
 
 Grid* initgrid();
-void initscreen();
+int initscreen();
 
 //print helpers
 void centerText(char *text, char* colour, int fieldWidth);
